@@ -6,4 +6,42 @@
     dest: /etc/yum.repos.d/grafana.repo
     mode: '0644'
 
+- name: Install grafana
+  ansible.builtin.package:
+    name: grafana
+    state: present
 
+# - name: Do systemctl daemon-reload
+#   ansible.builtin.systemd_service:
+#     name: daemon-reload
+#     state: reloaded
+
+
+- name: Start grafana service
+  ansible.builtin.service:
+    name: grafana-server
+    state: started
+    enabled: true
+
+# - name: Configure grafana to be enabled at startup
+#   ansible.builtin.service:
+#     name: grafana-server
+#     enabled: true
+
+- name: Ensure http_port = 8080 is in the grafana config file
+  community.general.ini_file:
+    path: /etc/grafana/grafana.ini
+    section: server
+    option: http_port
+    value: 8080
+    mode: '0640'
+  notify: restart_grafana_server
+
+- name: Ensure default_theme = light under [users] in the grafana config file
+  community.general.ini_file:
+    path: /etc/grafana/grafana.ini
+    section: users
+    option: default_theme
+    value: dark
+    mode: '0640'
+  notify: restart_grafana_server
