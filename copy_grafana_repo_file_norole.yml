@@ -1,0 +1,12 @@
+---
+- name: Copy Grafana Repo file to our node
+  hosts: grafana
+  become: true
+  tasks:
+  - name: Install grafana
+    ansible.builtin.copy:
+      src: grafana.repo
+      dest: /etc/yum.repos.d/grafana.repo
+      mode: '0644'
+      owner: grafana
+      group: grafana
