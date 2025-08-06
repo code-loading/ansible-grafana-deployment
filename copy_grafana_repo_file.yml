@@ -1,0 +1,7 @@
+---
+- name: Copy Grafana Repo file to our node
+  hosts: grafana
+  become: true
+  tasks:
+    - name: Copy Grafana Repo file to our node
+      
